@@ -12,8 +12,7 @@ fi
 # Start bash in tmux
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
   cd
-  exec tmux
-  echo "lol"
+  tmux
 fi
 
 # Open man of typed command in tmux split
@@ -36,6 +35,12 @@ alias gh="o \`git remote -v | grep fetch | awk 'NR==1{print \$2}' | sed 's/git@/
 # Set up fzf key bindings and fuzzy completion
 if command -v fzf &> /dev/null; then
   source /usr/share/doc/fzf/examples/key-bindings.bash
-  source /usr/share/doc/fzf/examples/completion.bash
+  if [ -f /usr/share/bash-completion/completions/fzf ]; then
+    source /usr/share/bash-completion/completions/fzf
+  fi
+
+  if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
+    source /usr/share/doc/fzf/examples/key-bindings.bash
+  fi
 fi
 
