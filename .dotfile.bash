@@ -10,6 +10,17 @@ if command -v nvim &> /dev/null; then
 fi
 
 # Start bash in tmux
+
+if [[ $(uname -r) =~ WSL ]]; then
+  function copy-command {
+    pbcopy
+  }
+else
+  function copy-command {
+    xclip -selection clipboard -i
+  }
+fi
+
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
   cd
   tmux
