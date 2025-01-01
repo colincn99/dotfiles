@@ -1,5 +1,4 @@
 stty -ixon
-bind -s 'set completion-ignore-case on'
 
 # Neovim aliases
 if command -v nvim &> /dev/null; then
@@ -14,6 +13,13 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [
   cd
   tmux
 fi
+
+# Bash completion
+bind -s 'set completion-ignore-case on'
+bind 'TAB: menu-complete'
+bind '"\e[Z": menu-complete-backward'
+bind 'set show-all-if-ambiguous on'
+bind 'set show-all-if-unmodified on'
 
 # Open man of typed command in tmux split
 if command -v tmux &> /dev/null && [ -n "$TMUX" ]; then
