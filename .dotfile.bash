@@ -16,7 +16,7 @@ fi
 
 # Bash completion
 bind -s 'set completion-ignore-case on'
-bind 'TAB: menu-complete'
+bind '\C-f: menu-complete'
 bind '"\e[Z": menu-complete-backward'
 bind 'set show-all-if-ambiguous on'
 bind 'set show-all-if-unmodified on'
