@@ -18,8 +18,6 @@ fi
 bind -s 'set completion-ignore-case on'
 bind '"\e[Z": menu-complete'
 bind '\C-f: menu-complete-backward'
-bind 'set show-all-if-ambiguous on'
-bind 'set show-all-if-unmodified on'
 
 # Open man of typed command in tmux split
 if command -v tmux &> /dev/null && [ -n "$TMUX" ]; then
