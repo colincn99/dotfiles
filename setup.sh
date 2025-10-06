@@ -4,6 +4,7 @@
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 ln -sf $SCRIPT_DIR/.tmux.conf $HOME/.tmux.conf
 ln -sf $SCRIPT_DIR/.dotfile.bash $HOME/.dotfile.bash
+ln -sf $SCRIPT_DIR/.vimrc $HOME/.vimrc
 
 # Add line in bashrc to source file in git repo
 LINE='source "$HOME/.dotfile.bash"'
