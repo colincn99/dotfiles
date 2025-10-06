@@ -46,6 +46,10 @@ nnoremap <esc>h 12h
 nnoremap <esc>j 6j
 nnoremap <esc>k 6k
 nnoremap <esc>l 12l
+vnoremap <esc>h 12h
+vnoremap <esc>j 6j
+vnoremap <esc>k 6k
+vnoremap <esc>l 12l
 
 command! -nargs=0 Tabmerge call Tabmerge()
 command! -nargs=0 MarkTab let g:tabnr=tabpagenr()
