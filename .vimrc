@@ -39,7 +39,7 @@ nnoremap <leader>x :<C-u>tabclose<CR>
 vnoremap < <gv^
 vnoremap > >gv^
 
-vnoremap p _dP
+vnoremap p "_dP
 
 set ttimeout ttimeoutlen=5
 nnoremap <esc>h 12h
