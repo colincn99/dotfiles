@@ -10,3 +10,8 @@ ln -sf $SCRIPT_DIR/.vimrc $HOME/.vimrc
 LINE='source "$HOME/.dotfile.bash"'
 FILE="$HOME/.bashrc"
 grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+
+# Run Touhou Mouse setup if on Ubuntu/Debian
+if [ -x "$SCRIPT_DIR/touhou_mouse/touhou_mouse_setup.sh" ] && command -v apt >/dev/null 2>&1; then
+    "$SCRIPT_DIR/touhou_mouse/touhou_mouse_setup.sh"
+fi
