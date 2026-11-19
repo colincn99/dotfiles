@@ -2,19 +2,23 @@
 #SingleInstance Force
 
 ; --- Prevent Cursor Jump ---
+; Per-monitor DPI awareness so coordinates are physical pixels on every monitor
+DllCall("SetThreadDpiAwarenessContext", "ptr", -4, "ptr")
 CoordMode("Mouse", "Screen")
 SendMode("Event")
 SetMouseDelay(0)
 
 ; --- Configuration ---
 NormalSpeed      := 18   ; Cursor pixels moved per tick (Normal)
-SlowSpeed        := 5    ; Cursor pixels moved per tick (When holding L)
+SlowSpeed        := 4    ; Cursor pixels moved per tick (When holding L)
 TickRate         := 15   ; Update interval in milliseconds
 
 NormalScrollTick := 3    ; Scroll every 3 ticks (~45ms) in Normal mode
 SlowScrollTick   := 10   ; Scroll every 10 ticks (~150ms) when holding L
 
-MouseMinMove     := 30   ; Pixels physical mouse/trackpad must move within 300ms to exit
+RefWidth         := 1920 ; Monitor width (px) at which speeds above apply 1:1; others scale proportionally
+
+MouseMinMove     := 30  ; Pixels physical mouse/trackpad must move within 300ms to exit
 BumpWindowMs     := 300  ; Time window (ms) before small accidental bumps reset
 
 MouseMode    := false
@@ -51,6 +55,17 @@ SetMouseMode(state) {
         ToolTip("Mouse Mode: OFF")
     }
     SetTimer(() => ToolTip(), -1500)
+}
+
+; Speed multiplier based on the width of the monitor containing (x, y)
+GetScreenScale(x, y) {
+    global RefWidth
+    Loop MonitorGetCount() {
+        MonitorGet(A_Index, &L, &T, &R, &B)
+        if (x >= L && x < R && y >= T && y < B)
+            return (R - L) / RefWidth
+    }
+    return 1
 }
 
 ; Dedicated ON shortcut: Ctrl + Shift + J
@@ -93,7 +108,8 @@ MoveCursor() {
     isSlow := GetKeyState("l", "P")
 
     ; --- Cursor Movement ---
-    speed := isSlow ? SlowSpeed : NormalSpeed
+    MouseGetPos(&sx, &sy)
+    speed := Max(1, Round((isSlow ? SlowSpeed : NormalSpeed) * GetScreenScale(sx, sy)))
     dx := 0
     dy := 0
 
@@ -114,8 +130,11 @@ MoveCursor() {
             dx *= speed
             dy *= speed
         }
-        MouseMove(dx, dy, 0, "R")
-        MouseGetPos(&LastX, &LastY) ; Update expected position after synthetic move
+        ; Absolute move via SetCursorPos: unaffected by pointer acceleration and
+        ; by DPI/size differences between monitors (relative moves are not).
+        MouseGetPos(&px, &py)
+        DllCall("SetCursorPos", "int", px + dx, "int", py + dy)
+        MouseGetPos(&LastX, &LastY) ; Read back actual position (Windows may clamp at monitor edges)
     }
 
     ; --- Scroll Wheel (E = Down, Q = Up) ---
